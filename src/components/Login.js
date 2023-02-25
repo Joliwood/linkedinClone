@@ -2,10 +2,32 @@ import styled from "styled-components";
 // import { connect } from "react-redux";
 // import { signInAPI } from "../actions";
 import { signInWithGoogle } from "../firebase";
+import { redirect } from "react-router";
+import { UserAuth } from "../context/authContext";
 
 const Login = (props) => {
+  const { user, logOut } = UserAuth();
+
+  const handleSignOut = async () => {
+    try {
+      await logOut();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const { googleSignIn } = UserAuth();
+  const handleGoogleSignIn = async () => {
+    try {
+      await googleSignIn();
+    } catch (error) {
+      console.Log(error);
+    }
+  };
+
   return (
     <Container>
+      {props.user && redirect("/home")}
       <Nav>
         <a href="/">
           <img src="/images/login-logo.svg" alt="" />
@@ -21,11 +43,19 @@ const Login = (props) => {
           <img src="/images/login-hero.svg" alt="" />
         </Hero>
         <Form>
-          <Google>
+          {user?.displayName ? (
+            <button onClick={logOut}>Logout</button>
+          ) : (
+            <Google onClick={signInWithGoogle}>
+              <img src="/images/google.svg" alt="" />
+              Sign in with Google
+            </Google>
+          )}
+
+          {/* <Google onClick={(props) => props.signIn()}>
             <img src="/images/google.svg" alt="" />
             Sign in with Google
-          </Google>
-          <button onClick={signInWithGoogle}>GO TESTER ICI</button>
+          </Google> */}
         </Form>
       </Section>
     </Container>
@@ -167,7 +197,9 @@ const Google = styled.button`
 `;
 
 // const mapStateToProps = (state) => {
-//   return {};
+//   return {
+//     user: state.userState.user,
+//   };
 // };
 
 // const mapDispatchToProps = (dispatch) => ({
@@ -175,4 +207,5 @@ const Google = styled.button`
 // });
 
 // export default connect(mapStateToProps, mapDispatchToProps)(Login);
+
 export default Login;
