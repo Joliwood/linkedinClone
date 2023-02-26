@@ -1,6 +1,18 @@
 import styled from "styled-components";
+import { UserAuth } from "../context/authContext";
+import { useNavigate } from "react-router";
 
 const Header = (props) => {
+  const { logOut, user } = UserAuth();
+
+  const handleSignOut = async () => {
+    try {
+      await logOut();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div>
       <Container>
@@ -17,6 +29,8 @@ const Header = (props) => {
             <SearchIcon>
               <img src="/images/search-icon.svg" alt="" />
             </SearchIcon>
+            <button onClick={handleSignOut}>Logout</button>
+            <p>Hello mister {user?.displayName}</p>
           </Search>
 
           <Nav>

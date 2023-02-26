@@ -4,6 +4,7 @@ import Login from "./components/Login.js";
 import Home from "./components/Home";
 import Header from "./components/Header";
 import { AuthContextProvider } from "./context/authContext";
+import Protected from "./components/protected";
 
 function App() {
   return (
@@ -16,10 +17,10 @@ function App() {
               exact
               path="/home"
               element={
-                <>
+                <Protected>
                   <Header />
                   <Home />
-                </>
+                </Protected>
               }
             />
           </Routes>

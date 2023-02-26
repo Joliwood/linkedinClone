@@ -1,12 +1,14 @@
+import { useEffect } from "react";
 import styled from "styled-components";
 // import { connect } from "react-redux";
 // import { signInAPI } from "../actions";
-import { signInWithGoogle } from "../firebase";
-import { redirect } from "react-router";
 import { UserAuth } from "../context/authContext";
+import { useNavigate } from "react-router";
 
 const Login = (props) => {
-  const { user, logOut } = UserAuth();
+  const { googleSignIn, user, logOut } = UserAuth();
+
+  const navigate = useNavigate();
 
   const handleSignOut = async () => {
     try {
@@ -16,7 +18,6 @@ const Login = (props) => {
     }
   };
 
-  const { googleSignIn } = UserAuth();
   const handleGoogleSignIn = async () => {
     try {
       await googleSignIn();
@@ -25,9 +26,15 @@ const Login = (props) => {
     }
   };
 
+  useEffect(() => {
+    if (user != null) {
+      navigate("/home");
+    }
+  }, [user]);
+
   return (
     <Container>
-      {props.user && redirect("/home")}
+      {/* {props.user && redirect("/home")} */}
       <Nav>
         <a href="/">
           <img src="/images/login-logo.svg" alt="" />
@@ -44,18 +51,13 @@ const Login = (props) => {
         </Hero>
         <Form>
           {user?.displayName ? (
-            <button onClick={logOut}>Logout</button>
+            <button onClick={handleSignOut}>Logout</button>
           ) : (
-            <Google onClick={signInWithGoogle}>
+            <Google onClick={handleGoogleSignIn}>
               <img src="/images/google.svg" alt="" />
               Sign in with Google
             </Google>
           )}
-
-          {/* <Google onClick={(props) => props.signIn()}>
-            <img src="/images/google.svg" alt="" />
-            Sign in with Google
-          </Google> */}
         </Form>
       </Section>
     </Container>
