@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { UserAuth } from "../context/authContext";
-import { useNavigate } from "react-router";
 
 const Header = (props) => {
   const { logOut, user } = UserAuth();
@@ -72,7 +71,11 @@ const Header = (props) => {
 
               <User>
                 <a>
-                  <img src="/images/user.svg" alt="" />
+                  {user?.photoURL ? (
+                    <img src={user.photoURL} alt="" />
+                  ) : (
+                    <img src="images/user.svg" alt="" />
+                  )}
                   <span>
                     Me
                     <img src="/images/down-icon.svg" alt="" />
@@ -80,7 +83,9 @@ const Header = (props) => {
                 </a>
 
                 <SignOut>
-                  <a>Sign out</a>
+                  <a>
+                    <button onClick={handleSignOut}>Logout</button>
+                  </a>
                 </SignOut>
               </User>
               <Work>

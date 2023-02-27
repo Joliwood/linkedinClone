@@ -1,6 +1,9 @@
 import styled from "styled-components";
+import { UserAuth } from "../context/authContext";
 
 const Leftside = (props) => {
+  const { user } = UserAuth();
+
   return (
     <Container>
       <ArtCard>
@@ -8,7 +11,7 @@ const Leftside = (props) => {
           <CardBackground />
           <a>
             <Photo />
-            <Link>Welcome, there!</Link>
+            <Link>Welcome, {user?.displayName}</Link>
           </a>
           <a>
             <AddPhotoText>Add a photo</AddPhotoText>
