@@ -1,7 +1,18 @@
 import styled from "styled-components";
 import { UserAuth } from "../context/authContext";
 import PostModal from "./PostModal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import {
+  doc,
+  getDoc,
+  getFirestore,
+  collection,
+  getDocs,
+  query,
+  onSnapshot,
+} from "firebase/firestore";
+import { app } from "../firebase";
+import ReactPlayer from "react-player";
 
 const Main = (props) => {
   const { user } = UserAuth();
@@ -25,6 +36,32 @@ const Main = (props) => {
     }
   };
 
+  const [postsDatas, setpostsDatas] = useState([]);
+
+  const obt = async () => {
+    const db = getFirestore(app);
+    const querySnapshot = await getDocs(collection(db, "linkedin-posts"));
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc.id, " => ", doc.data());
+    });
+    console.log(postsDatas);
+  };
+
+  const db = getFirestore(app);
+  // Read todo from firebase
+  useEffect(() => {
+    const q = query(collection(db, "linkedin-posts"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      let postsDatasArr = [];
+      querySnapshot.forEach((doc) => {
+        postsDatasArr.push({ ...doc.data(), id: doc.id });
+      });
+      setpostsDatas(postsDatasArr);
+    });
+    return () => unsubscribe();
+  }, []);
+
   return (
     <Container>
       <ShareBox>
@@ -38,7 +75,7 @@ const Main = (props) => {
           <button onClick={handleClick}>Start a post</button>
         </div>
         <div>
-          <button>
+          <button onClick={obt}>
             <img src="/images/photo-icon.svg" alt="" />
             <span>Photos</span>
           </button>
@@ -60,65 +97,73 @@ const Main = (props) => {
         </div>
       </ShareBox>
       <div>
-        <Article>
-          <SharedActor>
-            <a>
-              {user?.photoURL ? (
-                <img src={user.photoURL} alt="" />
-              ) : (
-                <img src="images/user.svg" alt="" />
-              )}
-              <div>
-                <span>Title</span>
-                <span>Info</span>
-                <span>Date</span>
-              </div>
-            </a>
-            <button>
-              <img src="/images/ellipsis.svg" alt="" />
-            </button>
-          </SharedActor>
-          <Description>Description</Description>
-          <SharedImage>
-            <a>
-              <img src="/images/randomPost.jpg" alt="" />
-            </a>
-          </SharedImage>
-          <SocialCounts>
-            <li>
+        {postsDatas.map((data, index) => (
+          <Article key={index}>
+            <SharedActor>
+              <a>
+                {user?.photoURL ? (
+                  <img src={user.photoURL} alt="" />
+                ) : (
+                  <img src="images/user.svg" alt="" />
+                )}
+                <div>
+                  <span>{user.displayName}</span>
+                  <span>{user.email}</span>
+                  <span>{data.date.toDate().toLocaleDateString()}</span>
+                </div>
+              </a>
               <button>
-                <img src="/images/like.svg" alt="" />
-                <img src="/images/clap.svg" alt="" />
-                <img src="/images/light.svg" alt="" />
-                75
+                <img src="/images/ellipsis.svg" alt="" />
               </button>
-            </li>
-            <li>
-              <a>3 comments</a>
-            </li>
-          </SocialCounts>
-          <SocialActions>
-            <button>
-              <img src="/images/likeButton.svg" alt="" />
-              <span>Like</span>
-            </button>
+            </SharedActor>
+            <Description>{data.description}</Description>
+            <SharedImage>
+              <a>
+                {data.video ? (
+                  <ReactPlayer width={"100%"} url={data.video} />
+                ) : data.image ? (
+                  <img src={data.image} alt="shared" />
+                ) : (
+                  ""
+                )}
+              </a>
+            </SharedImage>
+            <SocialCounts>
+              <li>
+                <button>
+                  <img src="/images/like.svg" alt="" />
+                  <img src="/images/clap.svg" alt="" />
+                  <img src="/images/light.svg" alt="" />
+                  75
+                </button>
+              </li>
+              <li>
+                <a>3 comments</a>
+              </li>
+            </SocialCounts>
+            <SocialActions>
+              <button>
+                <img src="/images/likeButton.svg" alt="" />
+                <span>Like</span>
+              </button>
 
-            <button>
-              <img src="/images/commentButton.svg" alt="" />
-              <span>Comments</span>
-            </button>
+              <button>
+                <img src="/images/commentButton.svg" alt="" />
+                <span>Comments</span>
+              </button>
 
-            <button>
-              <img src="/images/repostButton.svg" alt="" />
-              <span>Repost</span>
-            </button>
+              <button>
+                <img src="/images/repostButton.svg" alt="" />
+                <span>Repost</span>
+              </button>
 
-            <button>
-              <img src="/images/sendButton.svg" alt="" />
-              <span>Send</span>
-            </button>
-          </SocialActions>
-        </Article>
+              <button>
+                <img src="/images/sendButton.svg" alt="" />
+                <span>Send</span>
+              </button>
+            </SocialActions>
+          </Article>
+        ))}
       </div>
 
       <PostModal showModal={showModal} handleClick={handleClick} />

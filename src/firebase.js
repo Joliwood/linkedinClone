@@ -1,4 +1,6 @@
 import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+
 import {
   getAuth,
   GoogleAuthProvider,
@@ -7,6 +9,14 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
+
+// const pushPost = async (postDetails) => {
+// const time = Date.now();
+//   await firestore.collection("posters").add({
+//     ...postDetails,
+//     postedOn: new Intl.DateTimeFormat(["ban", "id"]).format(time),
+//   });
+// };
 
 const firebaseConfig = {
   apiKey: "AIzaSyDyBEcqi7it32BzJ7dBNELV87_ydisjklA",
@@ -18,7 +28,8 @@ const firebaseConfig = {
   measurementId: "G-PVVVT4DY8B",
 };
 
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
+
 export const auth = getAuth(app);
 
 export const provider = new GoogleAuthProvider();

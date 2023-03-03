@@ -28,8 +28,6 @@ const Header = (props) => {
             <SearchIcon>
               <img src="/images/search-icon.svg" alt="" />
             </SearchIcon>
-            <button onClick={handleSignOut}>Logout</button>
-            <p>Hello mister {user?.displayName}</p>
           </Search>
 
           <Nav>

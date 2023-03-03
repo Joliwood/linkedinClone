@@ -1,13 +1,25 @@
 import styled from "styled-components";
 import { useState } from "react";
 import ReactPlayer from "react-player";
+// import { connect } from "react-redux";
+import { UserAuth } from "../context/authContext";
+import {
+  doc,
+  setDoc,
+  getFirestore,
+  collection,
+  addDoc,
+} from "firebase/firestore";
+import { app } from "../firebase";
 
 const PostModal = (props) => {
   const [editorText, setEditorText] = useState("");
   const [sharedImage, setSharedImage] = useState("");
   const [videoLink, setVideoLink] = useState("");
   const [assetArea, setAssetArea] = useState("");
+  const { user } = UserAuth();
 
+  const firestore = getFirestore();
   const handleChange = (e) => {
     const image = e.target.files[0];
 
@@ -18,19 +30,31 @@ const PostModal = (props) => {
     setSharedImage(image);
   };
 
-  const switchAssetArea = (area) => {
+  const db = getFirestore(app);
+  const newPost = async () => {
+    await addDoc(collection(db, "linkedin-posts"), {
+      date: new Date(),
+      description: editorText,
+      image: sharedImage,
+      video: videoLink,
+      likes: 0,
+    });
+  };
+
+  const switchAssetArea = (assetArea) => {
     setSharedImage("");
     setVideoLink("");
-    setAssetArea(area);
+    setAssetArea(assetArea);
   };
 
   const reset = (e) => {
     setEditorText("");
     setSharedImage("");
     setVideoLink("");
-    setAssetArea(area);
+    setAssetArea(assetArea);
     props.handleClick(e);
   };
+
   return (
     <>
       {props.showModal === "open" && (
@@ -44,8 +68,12 @@ const PostModal = (props) => {
             </Header>
             <SharedContent>
               <UserInfo>
-                <img src="/images/user.svg" alt="" />
-                <span>Name</span>
+                {user.photoURL ? (
+                  <img src={user.photoURL} />
+                ) : (
+                  <img src="/images/user.svg" alt="" />
+                )}
+                <span>{user.displayName}</span>
               </UserInfo>
               <Editor>
                 <textarea
@@ -105,7 +133,10 @@ const PostModal = (props) => {
                 </AssetButton>
               </SharedComment>
 
-              <PostButton disabled={!editorText ? true : false}>
+              <PostButton
+                onClick={newPost}
+                disabled={!editorText ? true : false}
+              >
                 Post
               </PostButton>
             </SharedCreation>
@@ -240,6 +271,7 @@ const PostButton = styled.button`
   &:hover {
     background: ${(props) =>
       props.disabled ? "rgba(0, 0, 0, 0.08)" : "#004182"};
+    cursor: pointer;
   }
 `;
 
@@ -247,8 +279,10 @@ const Editor = styled.div`
   padding: 12px 24px;
   textarea {
     width: 100%;
+    width: -webkit-fill-available;
     min-height: 100px;
     resize: none;
+    padding: 20px;
   }
 
   input {
