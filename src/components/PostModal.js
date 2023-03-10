@@ -1,15 +1,8 @@
 import styled from "styled-components";
 import { useState } from "react";
 import ReactPlayer from "react-player";
-// import { connect } from "react-redux";
 import { UserAuth } from "../context/authContext";
-import {
-  doc,
-  setDoc,
-  getFirestore,
-  collection,
-  addDoc,
-} from "firebase/firestore";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
 import { app } from "../firebase";
 
 const PostModal = (props) => {
@@ -19,7 +12,6 @@ const PostModal = (props) => {
   const [assetArea, setAssetArea] = useState("");
   const { user } = UserAuth();
 
-  const firestore = getFirestore();
   const handleChange = (e) => {
     const image = e.target.files[0];
 
@@ -69,7 +61,11 @@ const PostModal = (props) => {
             <SharedContent>
               <UserInfo>
                 {user.photoURL ? (
-                  <img src={user.photoURL} />
+                  <img
+                    src={user.photoURL}
+                    alt={user.displayName}
+                    referrerPolicy="no-referrer"
+                  />
                 ) : (
                   <img src="/images/user.svg" alt="" />
                 )}
@@ -134,7 +130,10 @@ const PostModal = (props) => {
               </SharedComment>
 
               <PostButton
-                onClick={newPost}
+                onClick={(e) => {
+                  newPost();
+                  reset(e);
+                }}
                 disabled={!editorText ? true : false}
               >
                 Post

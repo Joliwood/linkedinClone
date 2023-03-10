@@ -70,7 +70,11 @@ const Header = (props) => {
               <User>
                 <a>
                   {user?.photoURL ? (
-                    <img src={user.photoURL} alt="" />
+                    <img
+                      src={user.photoURL}
+                      alt=""
+                      referrerPolicy="no-referrer"
+                    />
                   ) : (
                     <img src="images/user.svg" alt="" />
                   )}

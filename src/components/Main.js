@@ -3,8 +3,7 @@ import { UserAuth } from "../context/authContext";
 import PostModal from "./PostModal";
 import { useState, useEffect } from "react";
 import {
-  doc,
-  getDoc,
+  orderBy,
   getFirestore,
   collection,
   getDocs,
@@ -38,15 +37,21 @@ const Main = (props) => {
 
   const [postsDatas, setpostsDatas] = useState([]);
 
-  const obt = async () => {
-    const db = getFirestore(app);
-    const querySnapshot = await getDocs(collection(db, "linkedin-posts"));
-    querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
-    });
-    console.log(postsDatas);
-  };
+  // function onHeaderClick(e) {
+  //   let type = e.target.textContent.toLowerCase();
+  //   const sorted = [...postsDatas].sort((a, b) => a[type] > b[type]);
+  //   console.log(postsDatas[0].date.toDate().toLocaleDateString());
+  // }
+
+  // const obt = async () => {
+  //   const db = getFirestore(app);
+  //   const querySnapshot = await getDocs(collection(db, "linkedin-posts"));
+  //   querySnapshot.forEach((doc) => {
+  //     // doc.data() is never undefined for query doc snapshots
+  //     console.log(doc.id, " => ", doc.data());
+  //   });
+  //   console.log(postsDatas);
+  // };
 
   const db = getFirestore(app);
   // Read todo from firebase
@@ -57,7 +62,15 @@ const Main = (props) => {
       querySnapshot.forEach((doc) => {
         postsDatasArr.push({ ...doc.data(), id: doc.id });
       });
-      setpostsDatas(postsDatasArr);
+      setpostsDatas(
+        postsDatasArr.sort((a, b) =>
+          a.date.toDate().toLocaleDateString() >
+          b.date.toDate().toLocaleDateString()
+            ? -1
+            : 1
+        )
+      );
+      console.log(postsDatas);
     });
     return () => unsubscribe();
   }, []);
@@ -68,14 +81,18 @@ const Main = (props) => {
         Share
         <div>
           {user?.photoURL ? (
-            <img src={user.photoURL} alt="" />
+            <img
+              src={user.photoURL}
+              alt={user.displayName}
+              referrerPolicy="no-referrer"
+            />
           ) : (
-            <img src="images/user.svg" alt="" />
+            <img src="images/user.svg" alt="user" />
           )}
           <button onClick={handleClick}>Start a post</button>
         </div>
         <div>
-          <button onClick={obt}>
+          <button>
             <img src="/images/photo-icon.svg" alt="" />
             <span>Photos</span>
           </button>
@@ -102,7 +119,11 @@ const Main = (props) => {
             <SharedActor>
               <a>
                 {user?.photoURL ? (
-                  <img src={user.photoURL} alt="" />
+                  <img
+                    src={user.photoURL}
+                    alt={user.displayName}
+                    referrerPolicy="no-referrer"
+                  />
                 ) : (
                   <img src="images/user.svg" alt="" />
                 )}
@@ -134,7 +155,7 @@ const Main = (props) => {
                   <img src="/images/like.svg" alt="" />
                   <img src="/images/clap.svg" alt="" />
                   <img src="/images/light.svg" alt="" />
-                  75
+                  {data.likes}
                 </button>
               </li>
               <li>
