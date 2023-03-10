@@ -9,47 +9,47 @@ const Leftside = (props) => {
       <ArtCard>
         <UserInfo>
           <CardBackground />
-          <a>
+          <i>
             <Photo />
             <Link>Welcome, {user?.displayName}</Link>
-          </a>
-          <a>
+          </i>
+          <i>
             <AddPhotoText>Add a photo</AddPhotoText>
-          </a>
+          </i>
         </UserInfo>
         <Widget>
-          <a>
+          <i>
             <div>
               <span>Connections</span>
               <span>Grow your network</span>
             </div>
-            <img src="/images/widget-icon.svg" alt="" />
-          </a>
+            <img src="/images/widget-icon.svg" alt="widget icon" />
+          </i>
         </Widget>
         <Item>
           <span>
-            <img src="/images/item-icon.svg" alt="" />
+            <img src="/images/item-icon.svg" alt="item icon" />
             My Items
           </span>
         </Item>
       </ArtCard>
 
       <CommunityCard>
-        <a>
+        <i>
           <span>Groups</span>
-        </a>
-        <a>
+        </i>
+        <i>
           <span>
             Events
-            <img src="/images/plus-icon.svg" alt="" />
+            <img src="/images/plus-icon.svg" alt="plus icon" />
           </span>
-        </a>
-        <a>
+        </i>
+        <i>
           <span>Follow Hashtags</span>
-        </a>
-        <a>
+        </i>
+        <i>
           <span>Discover more</span>
-        </a>
+        </i>
       </CommunityCard>
     </Container>
   );
@@ -121,7 +121,8 @@ const Widget = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.15);
   padding-top: 12px;
   padding-bottom: 12px;
-  & > a {
+  & > a,
+  i {
     text-decoration: none;
     display: flex;
     justify-content: space-between;
@@ -175,7 +176,8 @@ const CommunityCard = styled(ArtCard)`
   text-align: left;
   display: flex;
   flex-direction: column;
-  a {
+  a,
+  i {
     color: black;
     padding: 4px 12px 4px 12px;
     font-size: 12px;

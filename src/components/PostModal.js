@@ -16,7 +16,7 @@ const PostModal = (props) => {
     const image = e.target.files[0];
 
     if (image === "" || image === undefined) {
-      alert("Not an image, the file is a ${typeof image}");
+      alert("Not an image, the file is a " + typeof image);
       return;
     }
     setSharedImage(image);
@@ -55,7 +55,7 @@ const PostModal = (props) => {
             <Header>
               <h2>Create a post</h2>
               <button onClick={(e) => reset(e)}>
-                <img src="/images/close-icon.svg" alt="" />
+                <img src="/images/close-icon.svg" alt="close icon" />
               </button>
             </Header>
             <SharedContent>
@@ -67,7 +67,7 @@ const PostModal = (props) => {
                     referrerPolicy="no-referrer"
                   />
                 ) : (
-                  <img src="/images/user.svg" alt="" />
+                  <img src="/images/user.svg" alt="user" />
                 )}
                 <span>{user.displayName}</span>
               </UserInfo>
@@ -92,7 +92,10 @@ const PostModal = (props) => {
                       <label htmlFor="file">Select an image to share</label>
                     </p>
                     {sharedImage && (
-                      <img src={URL.createObjectURL(sharedImage)} />
+                      <img
+                        src={URL.createObjectURL(sharedImage)}
+                        alt="shared"
+                      />
                     )}
                   </UploadImage>
                 ) : (
@@ -115,16 +118,16 @@ const PostModal = (props) => {
             <SharedCreation>
               <AttachAssets>
                 <AssetButton onClick={() => switchAssetArea("image")}>
-                  <img src="/images/shared-image.svg" alt="" />
+                  <img src="/images/shared-image.svg" alt="shared" />
                 </AssetButton>
                 <AssetButton onClick={() => switchAssetArea("media")}>
-                  <img src="/images/shared-video.svg" alt="" />
+                  <img src="/images/shared-video.svg" alt="shared" />
                 </AssetButton>
               </AttachAssets>
 
               <SharedComment>
                 <AssetButton>
-                  <img src="/images/shared-comment.svg" alt="" />
+                  <img src="/images/shared-comment.svg" alt="shared comment" />
                   Anyone
                 </AssetButton>
               </SharedComment>

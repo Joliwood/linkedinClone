@@ -17,87 +17,90 @@ const Header = (props) => {
       <Container>
         <Content>
           <Logo>
-            <a href="/home">
-              <img src="/images/home-logo.svg" alt="" />
-            </a>
+            <i>
+              <img src="/images/home-logo.svg" alt="home logo" />
+            </i>
           </Logo>
           <Search>
             <div>
               <input type="text" placeholder="Search" />
             </div>
             <SearchIcon>
-              <img src="/images/search-icon.svg" alt="" />
+              <img src="/images/search-icon.svg" alt="search icon" />
             </SearchIcon>
           </Search>
 
           <Nav>
             <NavListWrap>
               <NavList className="active">
-                <a>
-                  <img src="/images/nav-home.svg" alt="" />
+                <i>
+                  <img src="/images/nav-home.svg" alt="nav home" />
                   <span>Home</span>
-                </a>
+                </i>
               </NavList>
 
               <NavList>
-                <a>
-                  <img src="/images/nav-network.svg" alt="" />
+                <i>
+                  <img src="/images/nav-network.svg" alt="nav network" />
                   <span>My network</span>
-                </a>
+                </i>
               </NavList>
 
               <NavList>
-                <a>
-                  <img src="/images/nav-jobs.svg" alt="" />
+                <i>
+                  <img src="/images/nav-jobs.svg" alt="nav jobs" />
                   <span>Jobs</span>
-                </a>
+                </i>
               </NavList>
 
               <NavList>
-                <a>
-                  <img src="/images/nav-messaging.svg" alt="" />
+                <i>
+                  <img src="/images/nav-messaging.svg" alt="nav messaging" />
                   <span>Messaging</span>
-                </a>
+                </i>
               </NavList>
 
               <NavList>
-                <a>
-                  <img src="/images/nav-notifications.svg" alt="" />
+                <i>
+                  <img
+                    src="/images/nav-notifications.svg"
+                    alt="nav-notification"
+                  />
                   <span>Notifications</span>
-                </a>
+                </i>
               </NavList>
 
               <User>
-                <a>
+                <i>
                   {user?.photoURL ? (
                     <img
                       src={user.photoURL}
-                      alt=""
+                      alt={user.displayName}
                       referrerPolicy="no-referrer"
                     />
                   ) : (
-                    <img src="images/user.svg" alt="" />
+                    <img src="images/user.svg" alt="user" />
                   )}
                   <span>
                     Me
-                    <img src="/images/down-icon.svg" alt="" />
+                    <img src="/images/down-icon.svg" alt="down" />
                   </span>
-                </a>
+                </i>
 
                 <SignOut>
-                  <a>
+                  <i>
                     <button onClick={handleSignOut}>Logout</button>
-                  </a>
+                  </i>
                 </SignOut>
               </User>
               <Work>
-                <a>
+                <i>
                   <img src="/images/nav-work.svg" alt="" />
                   <span>
                     Work
                     <img src="/images/down-icon.svg" alt="" />
                   </span>
-                </a>
+                </i>
               </Work>
             </NavListWrap>
           </Nav>
@@ -203,7 +206,7 @@ const NavListWrap = styled.ul`
 const NavList = styled.li`
   display: flex;
   align-items: center;
-  a {
+  i {
     align-items: center;
     background: transparent;
     display: flex;
@@ -249,11 +252,11 @@ const SignOut = styled.div`
 `;
 
 const User = styled(NavList)`
-  a > svg {
+  i > svg {
     width: 24px;
     border-radius: 50%;
   }
-  a > img {
+  i > img {
     width: 24px;
     height: 24px;
     border-radius: 50%;

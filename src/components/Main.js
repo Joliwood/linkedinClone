@@ -3,10 +3,8 @@ import { UserAuth } from "../context/authContext";
 import PostModal from "./PostModal";
 import { useState, useEffect } from "react";
 import {
-  orderBy,
   getFirestore,
   collection,
-  getDocs,
   query,
   onSnapshot,
 } from "firebase/firestore";
@@ -37,22 +35,6 @@ const Main = (props) => {
 
   const [postsDatas, setpostsDatas] = useState([]);
 
-  // function onHeaderClick(e) {
-  //   let type = e.target.textContent.toLowerCase();
-  //   const sorted = [...postsDatas].sort((a, b) => a[type] > b[type]);
-  //   console.log(postsDatas[0].date.toDate().toLocaleDateString());
-  // }
-
-  // const obt = async () => {
-  //   const db = getFirestore(app);
-  //   const querySnapshot = await getDocs(collection(db, "linkedin-posts"));
-  //   querySnapshot.forEach((doc) => {
-  //     // doc.data() is never undefined for query doc snapshots
-  //     console.log(doc.id, " => ", doc.data());
-  //   });
-  //   console.log(postsDatas);
-  // };
-
   const db = getFirestore(app);
   // Read todo from firebase
   useEffect(() => {
@@ -73,7 +55,7 @@ const Main = (props) => {
       console.log(postsDatas);
     });
     return () => unsubscribe();
-  }, []);
+  }, [db, postsDatas]);
 
   return (
     <Container>
@@ -93,22 +75,22 @@ const Main = (props) => {
         </div>
         <div>
           <button>
-            <img src="/images/photo-icon.svg" alt="" />
+            <img src="/images/photo-icon.svg" alt="camera" />
             <span>Photos</span>
           </button>
 
           <button>
-            <img src="/images/video-icon.svg" alt="" />
+            <img src="/images/video-icon.svg" alt="video" />
             <span>Video</span>
           </button>
 
           <button>
-            <img src="/images/event-icon.svg" alt="" />
+            <img src="/images/event-icon.svg" alt="event" />
             <span>Event</span>
           </button>
 
           <button>
-            <img src="/images/article-icon.svg" alt="" />
+            <img src="/images/article-icon.svg" alt="article" />
             <span>Write article</span>
           </button>
         </div>
@@ -117,7 +99,7 @@ const Main = (props) => {
         {postsDatas.map((data, index) => (
           <Article key={index}>
             <SharedActor>
-              <a>
+              <i>
                 {user?.photoURL ? (
                   <img
                     src={user.photoURL}
@@ -125,21 +107,21 @@ const Main = (props) => {
                     referrerPolicy="no-referrer"
                   />
                 ) : (
-                  <img src="images/user.svg" alt="" />
+                  <img src="images/user.svg" alt="user" />
                 )}
                 <div>
                   <span>{user.displayName}</span>
                   <span>{user.email}</span>
                   <span>{data.date.toDate().toLocaleDateString()}</span>
                 </div>
-              </a>
+              </i>
               <button>
-                <img src="/images/ellipsis.svg" alt="" />
+                <img src="/images/ellipsis.svg" alt="ellipsis" />
               </button>
             </SharedActor>
             <Description>{data.description}</Description>
             <SharedImage>
-              <a>
+              <i>
                 {data.video ? (
                   <ReactPlayer width={"100%"} url={data.video} />
                 ) : data.image ? (
@@ -147,39 +129,39 @@ const Main = (props) => {
                 ) : (
                   ""
                 )}
-              </a>
+              </i>
             </SharedImage>
             <SocialCounts>
               <li>
                 <button>
-                  <img src="/images/like.svg" alt="" />
-                  <img src="/images/clap.svg" alt="" />
-                  <img src="/images/light.svg" alt="" />
+                  <img src="/images/like.svg" alt="like" />
+                  <img src="/images/clap.svg" alt="clap" />
+                  <img src="/images/light.svg" alt="light" />
                   {data.likes}
                 </button>
               </li>
               <li>
-                <a>3 comments</a>
+                <p>3 comments</p>
               </li>
             </SocialCounts>
             <SocialActions>
               <button>
-                <img src="/images/likeButton.svg" alt="" />
+                <img src="/images/likeButton.svg" alt="like button" />
                 <span>Like</span>
               </button>
 
               <button>
-                <img src="/images/commentButton.svg" alt="" />
+                <img src="/images/commentButton.svg" alt="comment button" />
                 <span>Comments</span>
               </button>
 
               <button>
-                <img src="/images/repostButton.svg" alt="" />
+                <img src="/images/repostButton.svg" alt="repost button" />
                 <span>Repost</span>
               </button>
 
               <button>
-                <img src="/images/sendButton.svg" alt="" />
+                <img src="/images/sendButton.svg" alt="send button" />
                 <span>Send</span>
               </button>
             </SocialActions>
@@ -276,7 +258,8 @@ const SharedActor = styled.div`
   margin-bottom: 8px;
   align-items: center;
   display: flex;
-  a {
+  a,
+  i {
     margin-right: 12px;
     flex-grow: 1;
     overflow: hidden;

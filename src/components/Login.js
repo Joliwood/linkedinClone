@@ -28,7 +28,7 @@ const Login = (props) => {
 
   useEffect(() => {
     if (user != null) {
-      navigate("/home");
+      return navigate("/home");
     }
   }, [user]);
 
@@ -37,7 +37,7 @@ const Login = (props) => {
       {/* {props.user && redirect("/home")} */}
       <Nav>
         <a href="/">
-          <img src="/images/login-logo.svg" alt="" />
+          <img src="/images/login-logo.svg" alt="login logo" />
         </a>
         <div>
           <Join>Join now</Join>
@@ -47,14 +47,14 @@ const Login = (props) => {
       <Section>
         <Hero>
           <h1>Welcome to your professional community</h1>
-          <img src="/images/login-hero.svg" alt="" />
+          <img src="/images/login-hero.svg" alt="login hero" />
         </Hero>
         <Form>
           {user?.displayName ? (
             <button onClick={handleSignOut}>Logout</button>
           ) : (
             <Google onClick={handleGoogleSignIn}>
-              <img src="/images/google.svg" alt="" />
+              <img src="/images/google.svg" alt="google" />
               Sign in with Google
             </Google>
           )}
