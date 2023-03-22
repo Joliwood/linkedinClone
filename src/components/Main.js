@@ -10,6 +10,7 @@ import {
 } from "firebase/firestore";
 import { app } from "../firebase";
 import ReactPlayer from "react-player";
+import firebase from "firebase/app";
 
 const Main = (props) => {
   const { user } = UserAuth();
@@ -35,6 +36,17 @@ const Main = (props) => {
 
   const [postsDatas, setpostsDatas] = useState([]);
 
+  const incrementCounter = (Firebase) => {
+    const db = firebase.firestore();
+    const increment = firebase.firestore.FieldValue.increment(1);
+    const storyRef = db
+      .collection("linkedin-posts")
+      .doc("bpCyV4YyKabcnhCpo73l");
+    storyRef.update({ reads: increment });
+  };
+
+  // bpCyV4YyKabcnhCpo73l -> id du document qu'on cherche à obtenir
+
   const db = getFirestore(app);
   // Read todo from firebase
   useEffect(() => {
@@ -52,7 +64,6 @@ const Main = (props) => {
             : 1
         )
       );
-      console.log(postsDatas);
     });
     return () => unsubscribe();
   }, []);
@@ -147,7 +158,7 @@ const Main = (props) => {
               </li>
             </SocialCounts>
             <SocialActions>
-              <button>
+              <button onClick={incrementCounter}>
                 <img src="/images/likeButton.svg" alt="like button" />
                 <span>Like</span>
               </button>

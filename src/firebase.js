@@ -1,22 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
 
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signInWithRedirect,
-  signOut,
-  onAuthStateChanged,
-} from "firebase/auth";
-
-// const pushPost = async (postDetails) => {
-// const time = Date.now();
-//   await firestore.collection("posters").add({
-//     ...postDetails,
-//     postedOn: new Intl.DateTimeFormat(["ban", "id"]).format(time),
-//   });
-// };
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDyBEcqi7it32BzJ7dBNELV87_ydisjklA",
