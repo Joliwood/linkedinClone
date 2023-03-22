@@ -30,7 +30,7 @@ const PostModal = (props) => {
       image: sharedImage,
       video: videoLink,
       likes: 0,
-      id: user.uid,
+      authid: user.uid,
     });
   };
 
