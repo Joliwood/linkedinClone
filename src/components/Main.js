@@ -55,7 +55,9 @@ const Main = (props) => {
       console.log(postsDatas);
     });
     return () => unsubscribe();
-  }, [db, postsDatas]);
+  }, []);
+
+  const filteredPosts = postsDatas.filter((data) => data.authid === user.uid);
 
   return (
     <Container>
@@ -96,7 +98,7 @@ const Main = (props) => {
         </div>
       </ShareBox>
       <div>
-        {postsDatas.map((data, index) => (
+        {filteredPosts.map((data, index) => (
           <Article key={index}>
             <SharedActor>
               <i>

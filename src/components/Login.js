@@ -1,7 +1,5 @@
 import { useEffect } from "react";
 import styled from "styled-components";
-// import { connect } from "react-redux";
-// import { signInAPI } from "../actions";
 import { UserAuth } from "../context/authContext";
 import { useNavigate } from "react-router";
 
@@ -34,7 +32,6 @@ const Login = (props) => {
 
   return (
     <Container>
-      {/* {props.user && redirect("/home")} */}
       <Nav>
         <a href="/">
           <img src="/images/login-logo.svg" alt="login logo" />
@@ -197,17 +194,5 @@ const Google = styled.button`
     color: rgba(0, 0, 0, 0.75);
   }
 `;
-
-// const mapStateToProps = (state) => {
-//   return {
-//     user: state.userState.user,
-//   };
-// };
-
-// const mapDispatchToProps = (dispatch) => ({
-//   signIn: () => dispatch(signInAPI()),
-// });
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Login);
 
 export default Login;
