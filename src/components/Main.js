@@ -7,10 +7,12 @@ import {
   collection,
   query,
   onSnapshot,
+  deleteDoc,
+  doc,
 } from "firebase/firestore";
 import { app } from "../firebase";
 import ReactPlayer from "react-player";
-import firebase from "firebase/app";
+import "firebase/firestore";
 
 const Main = (props) => {
   const { user } = UserAuth();
@@ -36,13 +38,16 @@ const Main = (props) => {
 
   const [postsDatas, setpostsDatas] = useState([]);
 
-  const incrementCounter = (Firebase) => {
-    const db = firebase.firestore();
-    const increment = firebase.firestore.FieldValue.increment(1);
-    const storyRef = db
-      .collection("linkedin-posts")
-      .doc("bpCyV4YyKabcnhCpo73l");
-    storyRef.update({ reads: increment });
+  const [count, setCount] = useState(42);
+
+  const incrementCounter = (e) => {
+    // setCount(user);
+    setCount(e.data.likes);
+    console.log(count);
+  };
+
+  const deleteDocument = async (e) => {
+    await deleteDoc(doc(db, "linkedin-posts", e.data.id));
   };
 
   // bpCyV4YyKabcnhCpo73l -> id du document qu'on cherche à obtenir
@@ -158,14 +163,14 @@ const Main = (props) => {
               </li>
             </SocialCounts>
             <SocialActions>
-              <button onClick={incrementCounter}>
+              <button onClick={() => incrementCounter((data = { data }))}>
                 <img src="/images/likeButton.svg" alt="like button" />
                 <span>Like</span>
               </button>
 
-              <button>
+              <button onClick={() => deleteDocument((data = { data }))}>
                 <img src="/images/commentButton.svg" alt="comment button" />
-                <span>Comments</span>
+                <span>Delete</span>
               </button>
 
               <button>
