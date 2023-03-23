@@ -29,7 +29,7 @@ const PostModal = (props) => {
       description: editorText,
       image: sharedImage,
       video: videoLink,
-      likes: 0,
+      likes: [],
       authid: user.uid,
     });
   };

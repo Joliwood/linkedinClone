@@ -9,6 +9,11 @@ import {
   onSnapshot,
   deleteDoc,
   doc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+  where,
+  getDoc,
 } from "firebase/firestore";
 import { app } from "../firebase";
 import ReactPlayer from "react-player";
@@ -38,16 +43,38 @@ const Main = (props) => {
 
   const [postsDatas, setpostsDatas] = useState([]);
 
-  const [count, setCount] = useState(42);
+  // const [count, setCount] = useState(42);
 
-  const incrementCounter = (e) => {
-    // setCount(user);
-    setCount(e.data.likes);
-    console.log(count);
+  const likeCounter = async (e) => {
+    const postRef = doc(db, "linkedin-posts", e.data.id);
+    const postSnap = await getDoc(postRef);
+
+    if (postSnap.exists()) {
+      const likesArray = postSnap.get("likes") || [];
+
+      if (likesArray.includes(user.uid)) {
+        await updateDoc(postRef, {
+          likes: arrayRemove(user.uid),
+        });
+      } else {
+        await updateDoc(postRef, {
+          likes: arrayUnion(user.uid),
+        });
+      }
+    } else {
+      console.log("This document doesn't exist");
+    }
   };
 
   const deleteDocument = async (e) => {
-    await deleteDoc(doc(db, "linkedin-posts", e.data.id));
+    if (
+      e.data.authid != "everyone" ||
+      user.uid === "9APnDd1r15VhFy0GA2wi8ihiuB93"
+    ) {
+      await deleteDoc(doc(db, "linkedin-posts", e.data.id));
+    } else {
+      alert("You don't have the permission to delete this post.");
+    }
   };
 
   // bpCyV4YyKabcnhCpo73l -> id du document qu'on cherche à obtenir
@@ -73,7 +100,9 @@ const Main = (props) => {
     return () => unsubscribe();
   }, []);
 
-  const filteredPosts = postsDatas.filter((data) => data.authid === user.uid);
+  const filteredPosts = postsDatas.filter(
+    (data) => data.authid === user.uid || data.authid === "everyone"
+  );
 
   return (
     <Container>
@@ -118,7 +147,13 @@ const Main = (props) => {
           <Article key={index}>
             <SharedActor>
               <i>
-                {user?.photoURL ? (
+                {data.authid === "everyone" ? (
+                  <img
+                    src="images/creatorPicture.jpg"
+                    alt="creator"
+                    referrerPolicy="no-referrer"
+                  />
+                ) : user?.photoURL ? (
                   <img
                     src={user.photoURL}
                     alt={user.displayName}
@@ -155,7 +190,7 @@ const Main = (props) => {
                   <img src="/images/like.svg" alt="like" />
                   <img src="/images/clap.svg" alt="clap" />
                   <img src="/images/light.svg" alt="light" />
-                  {data.likes}
+                  {data.likes.length} likes
                 </button>
               </li>
               <li>
@@ -163,7 +198,7 @@ const Main = (props) => {
               </li>
             </SocialCounts>
             <SocialActions>
-              <button onClick={() => incrementCounter((data = { data }))}>
+              <button onClick={() => likeCounter((data = { data }))}>
                 <img src="/images/likeButton.svg" alt="like button" />
                 <span>Like</span>
               </button>
