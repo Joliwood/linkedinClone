@@ -248,6 +248,7 @@ const ShareBox = styled(CommonCard)`
   color: #958b7b;
   margin: 0 0 8px;
   background: white;
+  padding-top: 8px;
   div {
     button {
       outline: none;

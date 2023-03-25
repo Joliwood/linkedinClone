@@ -206,6 +206,7 @@ const NavListWrap = styled.ul`
 const NavList = styled.li`
   display: flex;
   align-items: center;
+
   i {
     align-items: center;
     background: transparent;
@@ -219,6 +220,7 @@ const NavList = styled.li`
     min-width: 80px;
     position: relative;
     text-decoration: none;
+
     span {
       color: rgba(0, 0, 0, 0.6);
       display: flex;
@@ -230,6 +232,8 @@ const NavList = styled.li`
   }
   &:hover,
   &:active {
+    background-color: #f7f7f7;
+    cursor: pointer;
     a {
       span {
         color: rgba(0, 0, 0, 0.9);
