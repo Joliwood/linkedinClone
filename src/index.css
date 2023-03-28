@@ -41,6 +41,19 @@ body {
   font-family: Arial, sans-serif;
 }
 
+.bloquedArea {
+  cursor: not-allowed !important;
+}
+
+.placeholder-active body {
+  filter: brightness(0.5);
+}
+
+.search-active:hover {
+  background-color: unset !important;
+  cursor: unset !important;
+}
+
 @-webkit-keyframes fadeIn {
   from {
     opacity: 0;

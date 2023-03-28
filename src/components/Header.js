@@ -1,8 +1,12 @@
+import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { UserAuth } from "../context/authContext";
+import "../index.css";
 
-const Header = (props) => {
+const Header = () => {
   const { logOut, user } = UserAuth();
+  const [searchBar, isSearchBar] = useState(false);
+  const inputRef = useRef(null);
 
   const handleSignOut = async () => {
     try {
@@ -12,15 +16,47 @@ const Header = (props) => {
     }
   };
 
+  const handleEmbedSearchBarClick = () => {
+    isSearchBar(true);
+  };
+
+  const handleInputBlur = () => {
+    isSearchBar(false);
+  };
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.select();
+    }
+  }, [searchBar]);
+
   return (
     <div>
       <Container>
         <Content>
           <Logo>
-            <i>
+            <a href="#">
               <img src="/images/home-logo.svg" alt="home logo" />
-            </i>
+            </a>
           </Logo>
+
+          <EmbedSearchBar
+            onClick={handleEmbedSearchBarClick}
+            className={searchBar ? "search-active" : ""}
+          >
+            <SearchIcon>
+              <img src="/images/search-icon.svg" alt="search icon" />
+            </SearchIcon>
+            {searchBar && (
+              <input
+                type="text"
+                placeholder="Search"
+                ref={inputRef}
+                onBlur={handleInputBlur}
+              />
+            )}
+          </EmbedSearchBar>
+
           <Search>
             <div>
               <input type="text" placeholder="Search" />
@@ -30,80 +66,82 @@ const Header = (props) => {
             </SearchIcon>
           </Search>
 
-          <Nav>
-            <NavListWrap>
-              <NavList className="active">
-                <i>
-                  <img src="/images/nav-home.svg" alt="nav home" />
-                  <span>Home</span>
-                </i>
-              </NavList>
-
-              <NavList>
-                <i>
-                  <img src="/images/nav-network.svg" alt="nav network" />
-                  <span>My network</span>
-                </i>
-              </NavList>
-
-              <NavList>
-                <i>
-                  <img src="/images/nav-jobs.svg" alt="nav jobs" />
-                  <span>Jobs</span>
-                </i>
-              </NavList>
-
-              <NavList>
-                <i>
-                  <img src="/images/nav-messaging.svg" alt="nav messaging" />
-                  <span>Messaging</span>
-                </i>
-              </NavList>
-
-              <NavList>
-                <i>
-                  <img
-                    src="/images/nav-notifications.svg"
-                    alt="nav-notification"
-                  />
-                  <span>Notifications</span>
-                </i>
-              </NavList>
-
-              <User>
-                <i>
-                  {user?.photoURL ? (
-                    <img
-                      src={user.photoURL}
-                      alt={user.displayName}
-                      referrerPolicy="no-referrer"
-                    />
-                  ) : (
-                    <img src="images/user.svg" alt="user" />
-                  )}
-                  <span>
-                    Me
-                    <img src="/images/down-icon.svg" alt="down" />
-                  </span>
-                </i>
-
-                <SignOut>
+          {!searchBar && (
+            <Nav>
+              <NavListWrap>
+                <NavList className="active">
                   <i>
-                    <button onClick={handleSignOut}>Logout</button>
+                    <img src="/images/nav-home.svg" alt="nav home" />
+                    <span>Home</span>
                   </i>
-                </SignOut>
-              </User>
-              <Work>
-                <i>
-                  <img src="/images/nav-work.svg" alt="" />
-                  <span>
-                    Work
-                    <img src="/images/down-icon.svg" alt="" />
-                  </span>
-                </i>
-              </Work>
-            </NavListWrap>
-          </Nav>
+                </NavList>
+
+                <NavList className="bloquedArea">
+                  <i>
+                    <img src="/images/nav-network.svg" alt="nav network" />
+                    <span>My network</span>
+                  </i>
+                </NavList>
+
+                <NavList className="bloquedArea">
+                  <i>
+                    <img src="/images/nav-jobs.svg" alt="nav jobs" />
+                    <span>Jobs</span>
+                  </i>
+                </NavList>
+
+                <NavList className="bloquedArea">
+                  <i>
+                    <img src="/images/nav-messaging.svg" alt="nav messaging" />
+                    <span>Messaging</span>
+                  </i>
+                </NavList>
+
+                <NavList className="bloquedArea">
+                  <i>
+                    <img
+                      src="/images/nav-notifications.svg"
+                      alt="nav-notification"
+                    />
+                    <span>Notifications</span>
+                  </i>
+                </NavList>
+
+                <User>
+                  <i>
+                    {user?.photoURL ? (
+                      <img
+                        src={user.photoURL}
+                        alt={user.displayName}
+                        referrerPolicy="no-referrer"
+                      />
+                    ) : (
+                      <img src="images/user.svg" alt="user" />
+                    )}
+                    <span>
+                      Me
+                      <img src="/images/down-icon.svg" alt="down" />
+                    </span>
+                  </i>
+
+                  <SignOut>
+                    <i>
+                      <button onClick={handleSignOut}>Logout</button>
+                    </i>
+                  </SignOut>
+                </User>
+                <Work className="bloquedArea">
+                  <i>
+                    <img src="/images/nav-work.svg" alt="" />
+                    <span>
+                      Work
+                      <img src="/images/down-icon.svg" alt="" />
+                    </span>
+                  </i>
+                </Work>
+              </NavListWrap>
+            </Nav>
+          )}
         </Content>
       </Container>
     </div>
@@ -117,7 +155,7 @@ const Container = styled.div`
   padding: 0 24px;
   position: fixed;
   top: 0;
-  width: 100vw;
+  width: calc(100vw - 48px);
   z-index: 100;
 `;
 
@@ -132,6 +170,7 @@ const Content = styled.div`
 const Logo = styled.span`
   margin-right: 8px;
   font-size: 0px;
+  cursor: pointer;
 `;
 
 const Search = styled.div`
@@ -154,6 +193,22 @@ const Search = styled.div`
       height: 34px;
       border-color: #dce6f1;
       vertical-align: text-top;
+      @media (max-width: 768px) {
+        display: none;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    flex-grow: unset;
+    height: 52px;
+    width: 70px;
+    display: none;
+    align-self: center;
+    justify-content: center;
+    :hover {
+      cursor: pointer;
+      background-color: #f7f7f7;
     }
   }
 `;
@@ -170,17 +225,22 @@ const SearchIcon = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  @media (max-width: 768px) {
+    position: relative;
+    top: 0;
+  }
+  img {
+    @media (max-width: 768px) {
+      width: 24px;
+    }
+  }
 `;
 
 const Nav = styled.nav`
   margin-left: auto;
   display: block;
   @media (max-width: 768px) {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    background: white;
-    width: 100%;
+    margin-left: unset;
   }
 `;
 
@@ -225,6 +285,9 @@ const NavList = styled.li`
       color: rgba(0, 0, 0, 0.6);
       display: flex;
       align-items: center;
+      @media (max-width: 768px) {
+        display: none;
+      }
     }
     @media (max-width: 768px) {
       min-width: 70px;
@@ -275,6 +338,42 @@ const User = styled(NavList)`
       display: flex;
       justify-content: center;
     }
+  }
+`;
+
+const EmbedSearchBar = styled.div`
+  flex-grow: unset;
+  height: 52px;
+  width: 70px;
+  display: none;
+  align-self: center;
+  justify-content: center;
+  :hover {
+    cursor: pointer;
+    background-color: #f7f7f7;
+  }
+  input {
+    display: flex;
+    position: absolute;
+    border: none;
+    box-shadow: none;
+    background-color: #eef3f8;
+    border-radius: 2px;
+    color: rgba(0, 0, 0, 0.9);
+    padding: 0 8px 0 60px;
+    left: 75px;
+    right: 30px;
+    top: 9px;
+    line-height: 1.75;
+    font-weight: 400;
+    font-size: 14px;
+    height: 34px;
+    border-color: #dce6f1;
+    vertical-align: text-top;
+    border-radius: 4px;
+  }
+  @media (max-width: 768px) {
+    display: flex;
   }
 `;
 
