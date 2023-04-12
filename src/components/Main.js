@@ -240,6 +240,9 @@ const CommonCard = styled.div`
   position: relative;
   border: none;
   box-shadow: 0 0 0 1px rgb(0 0 0 / 15%), 0 0 0 rgb(0 0 0 / 20%);
+  @media (max-width: 560px) {
+    border-radius: 0;
+  }
 `;
 
 const ShareBox = styled(CommonCard)`

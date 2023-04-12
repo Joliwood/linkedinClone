@@ -43,6 +43,9 @@ const Rightside = (props) => {
 
 const Container = styled.div`
   grid-area: rightside;
+  @media (max-width: 992px) {
+    display: none;
+  }
 `;
 
 const FollowCard = styled.div`
