@@ -403,6 +403,7 @@ const SocialCounts = styled.ul`
 const SocialActions = styled.div`
   align-items: center;
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-start;
   margin: 0;
   min-height: 40px;

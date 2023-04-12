@@ -88,6 +88,7 @@ const PostModal = (props) => {
                       id="file"
                       style={{ display: "none" }}
                       onChange={handleChange}
+                      disabled
                     />
                     <p>
                       <label htmlFor="file">Select an image to share</label>
@@ -300,6 +301,10 @@ const UploadImage = styled.div`
   text-align: center;
   img {
     width: 100%;
+  }
+
+  label:hover {
+    cursor: not-allowed;
   }
 `;
 
