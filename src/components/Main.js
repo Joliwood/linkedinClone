@@ -12,14 +12,13 @@ import {
   updateDoc,
   arrayUnion,
   arrayRemove,
-  where,
   getDoc,
 } from "firebase/firestore";
 import { app } from "../firebase";
 import ReactPlayer from "react-player";
 import "firebase/firestore";
 
-const Main = (props) => {
+const Main = () => {
   const { user } = UserAuth();
   const [showModal, setShowModal] = useState("close");
   const handleClick = (e) => {
@@ -42,8 +41,6 @@ const Main = (props) => {
   };
 
   const [postsDatas, setpostsDatas] = useState([]);
-
-  // const [count, setCount] = useState(42);
 
   const likeCounter = async (e) => {
     const postRef = doc(db, "linkedin-posts", e.data.id);
@@ -68,7 +65,7 @@ const Main = (props) => {
 
   const deleteDocument = async (e) => {
     if (
-      e.data.authid != "everyone" ||
+      e.data.authid !== "everyone" ||
       user.uid === "9APnDd1r15VhFy0GA2wi8ihiuB93"
     ) {
       await deleteDoc(doc(db, "linkedin-posts", e.data.id));
@@ -77,10 +74,7 @@ const Main = (props) => {
     }
   };
 
-  // bpCyV4YyKabcnhCpo73l -> id du document qu'on cherche à obtenir
-
   const db = getFirestore(app);
-  // Read todo from firebase
   useEffect(() => {
     const q = query(collection(db, "linkedin-posts"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -98,7 +92,7 @@ const Main = (props) => {
       );
     });
     return () => unsubscribe();
-  }, []);
+  }, [db]);
 
   const filteredPosts = postsDatas.filter(
     (data) => data.authid === user.uid || data.authid === "everyone"
