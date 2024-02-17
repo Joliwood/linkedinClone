@@ -35,7 +35,7 @@ const Header = () => {
       <Container>
         <Content>
           <Logo>
-            <a href="#">
+            <a href="/">
               <img src="/images/home-logo.svg" alt="home logo" />
             </a>
           </Logo>

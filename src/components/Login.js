@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { UserAuth } from "../context/authContext";
 import { useNavigate } from "react-router";
 
-const Login = (props) => {
+const Login = () => {
   const { googleSignIn, user, logOut } = UserAuth();
 
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ const Login = (props) => {
     if (user != null) {
       return navigate("/home");
     }
-  }, [user]);
+  }, [navigate, user]);
 
   return (
     <Container>
@@ -151,7 +151,6 @@ const Hero = styled.div`
   }
 
   img {
-    /* z-index: -1; */
     width: 700px;
     height: 670px;
     position: absolute;
